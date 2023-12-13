@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="LivrosBiblioteca.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:LivrosBiblioteca"
-    Shell.FlyoutBehavior="Disabled">
+<Shell x:Class="LivrosBiblioteca.AppShell"
+	   xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	   xmlns:livros="clr-namespace:LivrosBiblioteca.Paginas.Livros"
+	   xmlns:autores="clr-namespace:LivrosBiblioteca.Paginas.Autores"
+	   Shell.FlyoutBehavior="{OnPlatform Default=Flyout, WinUI=Locked}"
+	   Shell.FlyoutWidth="300">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+	<FlyoutItem Title="Livros">
+		<ShellContent ContentTemplate="{DataTemplate livros:LivrosListaPagina}"
+					  Route="LivrosListaPagina" />
+	</FlyoutItem>
+
+	<FlyoutItem Title="Autores">
+		<ShellContent ContentTemplate="{DataTemplate autores:AutoresListaPagina}"
+					  Route="AutoresListaPagina" />
+	</FlyoutItem>
 
 </Shell>

@@ -56,7 +56,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Paginas\" />
+	  <MauiXaml Update="Paginas\Autores\AutoresListaPagina.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Paginas\Livros\LivrosListaPagina.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PopUps\AdicionarLivroPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>

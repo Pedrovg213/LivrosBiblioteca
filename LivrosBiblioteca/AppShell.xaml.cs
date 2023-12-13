@@ -2,8 +2,7 @@
 
 public partial class AppShell : Shell
 {
-	public AppShell ()
-	{
+	// CONSTRUTORES
+	public AppShell () =>
 		InitializeComponent( );
-	}
 }

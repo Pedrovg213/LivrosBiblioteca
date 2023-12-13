@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:livros="clr-namespace:LivrosBiblioteca.ModelosVisuais.Livros"
+			 x:Class="LivrosBiblioteca.Paginas.Livros.LivrosListaPagina"
+			 x:DataType="livros:LivrosListaMV"
+			 Title="Livros">
+
+	<Grid Margin="30"
+		  RowDefinitions="*, 60">
+
+		<Grid ColumnDefinitions="*, *, *"
+			  Grid.Row="1">
+
+			<Button Grid.Column="1"
+					Command="{Binding AbrirAdicionarPopUpCommand}" />
+
+		</Grid>
+
+	</Grid>
+
+</ContentPage>

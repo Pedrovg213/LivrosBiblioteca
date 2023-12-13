@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Mopups.Hosting;
 
 namespace LivrosBiblioteca;
 public static class MauiProgram
@@ -8,6 +9,7 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>( )
+			.ConfigureMopups( )
 			.ConfigureFonts( fonts =>
 			{
 				fonts.AddFont( "OpenSans-Regular.ttf", "OpenSansRegular" );
@@ -15,7 +17,7 @@ public static class MauiProgram
 			} );
 
 #if DEBUG
-		builder.Logging.AddDebug();
+		builder.Logging.AddDebug( );
 #endif
 
 		return builder.Build( );
