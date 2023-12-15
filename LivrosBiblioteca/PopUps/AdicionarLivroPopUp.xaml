@@ -18,8 +18,8 @@
 	</mopups:PopupPage.Animation>
 
 
-	<StackLayout WidthRequest="790"
-				 HeightRequest="530"
+	<StackLayout x:Name="conteudoSlt"
+				 WidthRequest="790"
 				 HorizontalOptions="CenterAndExpand"
 				 VerticalOptions="CenterAndExpand">
 
@@ -33,7 +33,7 @@
 				<RoundRectangle CornerRadius="0, 20, 20, 0" />
 			</Border.StrokeShape>
 
-			<Grid	RowDefinitions="60 , *, *, 60"
+			<Grid	RowDefinitions="60 , *, 300, 60"
 					RowSpacing="45">
 
 				<!--TÍTULO-->
@@ -47,63 +47,80 @@
 				<VerticalStackLayout Grid.Row="1"
 									 VerticalOptions="Start">
 
-					<Entry Placeholder="Título do Livro"
+					<Entry x:Name="tituloEty"
+						   Placeholder="Título do Livro"
 						   HorizontalOptions="Fill"
 						   HorizontalTextAlignment="Center" />
 					<Label Text="Lançamento:"
 						   HorizontalOptions="Center" />
-					<Entry Placeholder="dd/mm/aaaa ac"
+					<Entry x:Name="lancamentoEty"
+						   Placeholder="dd/mm/aaaa ac"
 						   HorizontalOptions="Fill"
 						   HorizontalTextAlignment="Center"
-						   TextChanged="Entry_TextChanged"
+						   TextChanged="DateEntry_TextChanged"
 						   Unfocused="Entry_Unfocused" />
 
 				</VerticalStackLayout>
 				<!--AUTOR-->
 
-				<StackLayout Grid.ColumnSpan="2"
-							 Grid.Row="2">
-					<VerticalStackLayout VerticalOptions="End">
-						<SearchBar HorizontalTextAlignment="Center"
-								   Placeholder="Nome do Autor"
-								   TextChanged="SearchBar_TextChanged" />
-						<ListView x:Name="searchResults"
-								  WidthRequest="0" />
+				<ScrollView x:Name="autorSVw"
+							Grid.ColumnSpan="2"
+							Grid.Row="2"
+							VerticalOptions="Start">
+					<VerticalStackLayout x:Name="autorSLTGeral"
+										 Spacing="30">
+
+						<VerticalStackLayout>
+							<VerticalStackLayout VerticalOptions="End">
+								<Label x:Name="autor01Lbl"
+									   HorizontalOptions="Center"
+									   HorizontalTextAlignment="Center"
+									   Text="Autor 01"
+									   IsVisible="False" />
+								<SearchBar x:Name="searchBar"
+										   HorizontalTextAlignment="Center"
+										   Placeholder="Nome do Autor"
+										   TextChanged="SearchBar_TextChanged" />
+								<ListView x:Name="searchResults"
+										  WidthRequest="0" />
+							</VerticalStackLayout>
+
+							<Grid x:Name="gridRef"
+								  ColumnDefinitions="*, *"
+								  ColumnSpacing="15"
+								  HorizontalOptions="Fill">
+								<!--Nascimento-->
+								<VerticalStackLayout HorizontalOptions="Fill"
+													 VerticalOptions="Start"
+													 Grid.Column="0">
+
+									<Label Text="Nascimento:"
+										   HorizontalOptions="Center" />
+									<Entry Placeholder="dd/mm/aaaa ac"
+										   HorizontalOptions="Fill"
+										   HorizontalTextAlignment="Center"
+										   TextChanged="DateEntry_TextChanged"
+										   Unfocused="Entry_Unfocused" />
+								</VerticalStackLayout>
+
+								<!--Morte-->
+								<VerticalStackLayout HorizontalOptions="Fill"
+													 VerticalOptions="Start"
+													 Grid.Column="1">
+
+									<Label Text="Morte:"
+										   HorizontalOptions="Center" />
+									<Entry Placeholder="dd/mm/aaaa ac"
+										   HorizontalOptions="Fill"
+										   HorizontalTextAlignment="Center"
+										   TextChanged="DateEntry_TextChanged"
+										   Unfocused="Entry_Unfocused" />
+
+								</VerticalStackLayout>
+							</Grid>
+						</VerticalStackLayout>
 					</VerticalStackLayout>
-
-					<Grid ColumnDefinitions="*, *"
-						  ColumnSpacing="15"
-						  HorizontalOptions="Fill">
-						<!--Nascimento-->
-						<VerticalStackLayout HorizontalOptions="Fill"
-											 VerticalOptions="Start"
-											 Grid.Column="0">
-
-							<Label Text="Nascimento:"
-								   HorizontalOptions="Center" />
-							<Entry Placeholder="dd/mm/aaaa ac"
-								   HorizontalOptions="Fill"
-								   HorizontalTextAlignment="Center"
-								   TextChanged="Entry_TextChanged"
-								   Unfocused="Entry_Unfocused" />
-						</VerticalStackLayout>
-
-						<!--Morte-->
-						<VerticalStackLayout HorizontalOptions="Fill"
-											 VerticalOptions="Start"
-											 Grid.Column="1">
-
-							<Label Text="Morte:"
-								   HorizontalOptions="Center" />
-							<Entry Placeholder="dd/mm/aaaa ac"
-								   HorizontalOptions="Fill"
-								   HorizontalTextAlignment="Center"
-								   TextChanged="Entry_TextChanged"
-								   Unfocused="Entry_Unfocused" />
-
-						</VerticalStackLayout>
-					</Grid>
-				</StackLayout>
+				</ScrollView>
 
 
 				<!--BOTÕES-->
@@ -114,23 +131,28 @@
 					<Button Text="Adicionar Autor"
 							HorizontalOptions="Fill"
 							VerticalOptions="End"
-							Grid.Column="0" />
+							Grid.Column="0"
+							Clicked="AdicionarAutor_BtnClick" />
 					<Button Text="Buscar Arquivo"
 							HorizontalOptions="Fill"
 							VerticalOptions="End"
-							Grid.Column="1" />
+							Grid.Column="1"
+							Clicked="ProcurarArquivo_BtnClick" />
 					<Button Text="Limpar"
 							HorizontalOptions="Fill"
 							VerticalOptions="End"
-							Grid.Column="2" />
+							Grid.Column="2"
+							Clicked="Limpar_BtnClick" />
 					<Button Text="Cancelar"
 							HorizontalOptions="Fill"
 							VerticalOptions="End"
-							Grid.Column="3" />
+							Grid.Column="3"
+							Clicked="Cancelar_BtnClick"/>
 					<Button Text="Ok"
 							HorizontalOptions="Fill"
 							VerticalOptions="End"
-							Grid.Column="4" />
+							Grid.Column="4" 
+							Clicked="Ok_BtnClick"/>
 
 				</Grid>
 			</Grid>

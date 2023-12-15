@@ -19,7 +19,7 @@ public partial class LivrosListaMV : ListasModeloVisual
 		ResetarAdicionarLivroPopUp( );
 	}
 
-	
+
 	// FUNÇÕES: private
 
 	/// <summary>

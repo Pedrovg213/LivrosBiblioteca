@@ -24,7 +24,7 @@ public class InfosGenericas
 	protected List<ObjectId> Contidos
 	{
 		get; set;
-	}
+	} = new List<ObjectId>( );
 
 
 	// FUNÇÕES: public

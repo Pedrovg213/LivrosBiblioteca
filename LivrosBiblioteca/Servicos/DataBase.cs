@@ -10,9 +10,14 @@ public static class DataBase
 	public const string DATABASE = "LivrosBiblioteca";
 
 	public const string LIVROS_COLECAO = "Livros";
+	public const string LIVRO_TITULO = "Titulo";
+	public const string LIVRO_LANCAMENTO = "Lançamento";
+	public const string LIVRO_ARQUIVO = "Arquivo";
 
 	public const string AUTORES_COLECAO = "Autores";
 	public const string AUTOR_NOME = "Nome";
+	public const string AUTOR_NASCIMENTO = "Nascimento";
+	public const string AUTOR_MORTE = "Morte";
 
 
 	// VARIÁVEIS: private static
