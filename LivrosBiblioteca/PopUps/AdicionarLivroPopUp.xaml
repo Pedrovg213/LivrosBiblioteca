@@ -96,7 +96,8 @@
 
 									<Label Text="Nascimento:"
 										   HorizontalOptions="Center" />
-									<Entry Placeholder="dd/mm/aaaa ac"
+									<Entry x:Name="nascimentoEty"
+										   Placeholder="dd/mm/aaaa ac"
 										   HorizontalOptions="Fill"
 										   HorizontalTextAlignment="Center"
 										   TextChanged="DateEntry_TextChanged"
@@ -110,7 +111,8 @@
 
 									<Label Text="Morte:"
 										   HorizontalOptions="Center" />
-									<Entry Placeholder="dd/mm/aaaa ac"
+									<Entry x:Name="morteEty"
+										   Placeholder="dd/mm/aaaa ac"
 										   HorizontalOptions="Fill"
 										   HorizontalTextAlignment="Center"
 										   TextChanged="DateEntry_TextChanged"
@@ -147,12 +149,12 @@
 							HorizontalOptions="Fill"
 							VerticalOptions="End"
 							Grid.Column="3"
-							Clicked="Cancelar_BtnClick"/>
+							Clicked="Cancelar_BtnClick" />
 					<Button Text="Ok"
 							HorizontalOptions="Fill"
 							VerticalOptions="End"
-							Grid.Column="4" 
-							Clicked="Ok_BtnClick"/>
+							Grid.Column="4"
+							Clicked="Ok_BtnClick" />
 
 				</Grid>
 			</Grid>

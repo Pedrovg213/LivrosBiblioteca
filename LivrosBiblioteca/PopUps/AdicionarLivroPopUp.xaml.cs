@@ -1,7 +1,9 @@
 using LivrosBiblioteca.Entidades;
+using LivrosBiblioteca.Eventos;
 using LivrosBiblioteca.Extensões;
 using LivrosBiblioteca.Servicos;
 using Mopups.Services;
+using SeletorLivros.Extensoes;
 
 namespace LivrosBiblioteca.PopUps;
 
@@ -10,22 +12,24 @@ public partial class AdicionarLivroPopUp
 	// VARIÁVEIS: private
 	private string livroCaminho;
 	private List<ListView> autoresListViews = new List<ListView>();
-	private List<SearchBar> barrasDeNomes = new List<SearchBar>();
 	private List<VerticalStackLayout> stackNovosAutores = new List<VerticalStackLayout>();
 	private List<AutorInfo> autoresInfo = new List<AutorInfo>();
 
+
+	// MÉTODOS: private
+	private EventAdicionarLivro AdicionarLivroEvento;
 
 	// CLASSES: private
 	private class AutorInfo
 	{
 		// VARIÁVEIS: private
-		private SearchBar nome;
-		private Entry nascimentoData;
-		private Entry morteData;
+		public SearchBar nome;
+		public Entry nascimentoData;
+		public Entry morteData;
 
 
 		// CONSTRUTORES: public
-		public AutorInfo ( SearchBar nome, Entry nascimentoData, Entry morteData, Livro livro )
+		public AutorInfo ( SearchBar nome, Entry nascimentoData, Entry morteData )
 		{
 			this.nome = nome;
 			this.nascimentoData = nascimentoData;
@@ -57,12 +61,14 @@ public partial class AdicionarLivroPopUp
 	/// <summary>
 	/// Inicialização dos componentes.
 	/// </summary>
-	public AdicionarLivroPopUp ()
+	public AdicionarLivroPopUp ( EventAdicionarLivro adicionarLivroEvento )
 	{
 		InitializeComponent( );
 
 		autoresListViews.Add( searchResults );
-		barrasDeNomes.Add( searchBar );
+		autoresInfo.Add( new( searchBar, nascimentoEty, morteEty ) );
+
+		AdicionarLivroEvento = adicionarLivroEvento;
 	}
 
 
@@ -71,7 +77,7 @@ public partial class AdicionarLivroPopUp
 	{
 		SearchBar searchBar = (SearchBar)sender;
 
-		int index = barrasDeNomes.IndexOf(searchBar);
+		int index = autoresInfo.Select(a => a.nome).ToList().IndexOf(searchBar);
 
 		autoresListViews[index].ItemsSource = DataBase.ProcurarAutoresPorNome( searchBar.Text );
 	}
@@ -166,19 +172,19 @@ public partial class AdicionarLivroPopUp
 			entry.Focus( );
 	}
 
-	private async void AdicionarAutor_BtnClick ( object sender, EventArgs e )
+	private void AdicionarAutor_BtnClick ( object sender, EventArgs e )
 	{
-		VerticalStackLayout autor = new VerticalStackLayout();
+		VerticalStackLayout autorSlt = new VerticalStackLayout();
 
-		autorSLTGeral.Add( autor );
-		stackNovosAutores.Add( autor );
+		autorSLTGeral.Add( autorSlt );
+		stackNovosAutores.Add( autorSlt );
 
 		// NOME DO AUTOR
 		VerticalStackLayout nomeAutorVSL = new VerticalStackLayout();
 
 		nomeAutorVSL.VerticalOptions = LayoutOptions.End;
 
-		autor.Add( nomeAutorVSL );
+		autorSlt.Add( nomeAutorVSL );
 
 		// NUMERAÇÃO DO AUTOR
 		Label numLbl = new Label();
@@ -195,8 +201,6 @@ public partial class AdicionarLivroPopUp
 		nomeAutorSBR.HorizontalTextAlignment = TextAlignment.Center;
 		nomeAutorSBR.Placeholder = "Nome do Autor";
 		nomeAutorSBR.TextChanged += SearchBar_TextChanged;
-
-		barrasDeNomes.Add( nomeAutorSBR );
 
 		nomeAutorVSL.Add( nomeAutorSBR );
 
@@ -217,7 +221,7 @@ public partial class AdicionarLivroPopUp
 		gridDatas.ColumnSpacing = 15;
 		gridDatas.HorizontalOptions = LayoutOptions.Fill;
 
-		autor.Add( gridDatas );
+		autorSlt.Add( gridDatas );
 
 
 		// NASCIMENTO
@@ -275,7 +279,9 @@ public partial class AdicionarLivroPopUp
 
 		autor01Lbl.IsVisible = autoresListViews.Count > 1;
 
-		await autorSVw.ScrollToAsync( autorSLTGeral, ScrollToPosition.Start, true );
+		autoresInfo.Add( new AutorInfo( nomeAutorSBR, nascimentoEty, morteEty ) );
+
+		nomeAutorSBR.Focus( );
 	}
 
 	private async void ProcurarArquivo_BtnClick ( object sender, EventArgs e )
@@ -293,7 +299,7 @@ public partial class AdicionarLivroPopUp
 
 		FileResult result = await FilePicker.Default.PickAsync(options);
 
-		if (string.IsNullOrEmpty( result.FullPath ))
+		if (result != null && string.IsNullOrEmpty( result.FullPath ))
 		{
 			livroCaminho = string.Empty;
 			return;
@@ -309,18 +315,15 @@ public partial class AdicionarLivroPopUp
 
 		lancamentoEty.Text = string.Empty;
 
-		autoresListViews.Clear( );
-		autoresListViews.Add( searchResults );
-
-		barrasDeNomes.Clear( );
-		barrasDeNomes.Add( searchBar );
-
 		foreach (VerticalStackLayout verticalSLT in stackNovosAutores)
 			autorSLTGeral.Remove( verticalSLT );
 
 		stackNovosAutores.Clear( );
 
 		autor01Lbl.IsVisible = autoresListViews.Count > 1;
+
+		for (int i = 1 ; i < autoresInfo.Count ; i++)
+			autoresInfo.RemoveAt( i );
 	}
 
 	private async void Cancelar_BtnClick ( object sender, EventArgs e )
@@ -329,8 +332,98 @@ public partial class AdicionarLivroPopUp
 			await MopupService.Instance.PopAsync( );
 	}
 
-	private void Ok_BtnClick ( object sender, EventArgs e )
+	private async void Ok_BtnClick ( object sender, EventArgs e )
 	{
+		string tituloLivro = tituloEty.Text;
+
+		if (string.IsNullOrEmpty( tituloLivro ))
+		{
+			await DisplayAlert( "Sem Título de livro", "Adicione um Título para o livro para poder adicioná-lo.", "Ok" );
+			tituloEty.Focus( );
+			return;
+		}
+
+		Livro livro;
+
+		List<Autor> autores = autoresInfo
+			.Where(a => !string.IsNullOrEmpty(a.nome.Text))
+			.SelectList(a => a.ConverterParaAutor());
+
+
+		// Se não houver nenhum autor.
+		if (autores.Count <= 0)
+		{
+			// Se não houver data de lançamento
+			if (string.IsNullOrEmpty( lancamentoEty.Text ))
+			{
+				if (string.IsNullOrEmpty( livroCaminho ))
+					livro = new Livro(
+						  tituloLivro,
+						  Enums.LeituraSituacao.Aguardando );
+				else
+					livro = new Livro(
+						  tituloLivro,
+						  Enums.LeituraSituacao.Aguardando,
+						  livroCaminho );
+			}
+			// Se houver data de lançamento
+			else
+			{
+				DateTime lancamento = lancamentoEty.Text.ConverterParaDateTime();
+
+				if (string.IsNullOrEmpty( livroCaminho ))
+					livro = new Livro(
+						tituloLivro,
+						Enums.LeituraSituacao.Aguardando,
+						lancamento );
+				else
+					livro = new Livro(
+						tituloLivro,
+						Enums.LeituraSituacao.Aguardando,
+						livroCaminho,
+						lancamento );
+			}
+		}
+		// Se houver ao menos um autor
+		else
+		{
+			// Se não houver data de lançamento
+			if (string.IsNullOrEmpty( lancamentoEty.Text ))
+			{
+				if (string.IsNullOrEmpty( livroCaminho ))
+					livro = new Livro(
+						 tituloLivro,
+						 Enums.LeituraSituacao.Aguardando,
+						 autores.SelectList( a => a.PegarId( ) ) );
+				else
+					livro = new Livro(
+						 tituloLivro,
+						 Enums.LeituraSituacao.Aguardando,
+						 livroCaminho,
+						 autores.SelectList( a => a.PegarId( ) ) );
+			}
+			// Se houver data de lançamento
+			else
+			{
+				DateTime lancamento = lancamentoEty.Text.ConverterParaDateTime();
+
+				if (string.IsNullOrEmpty( livroCaminho ))
+					livro = new Livro(
+						 tituloLivro,
+						 Enums.LeituraSituacao.Aguardando,
+						 autores.SelectList( a => a.PegarId( ) ),
+						 lancamento );
+				else
+					livro = new Livro(
+						 tituloLivro,
+						 Enums.LeituraSituacao.Aguardando,
+						 livroCaminho,
+						 autores.SelectList( a => a.PegarId( ) ),
+						 lancamento );
+			}
+		}
+
+		AdicionarLivroEvento.Invoke( livro );
 
 		Cancelar_BtnClick( sender, e );
 	}

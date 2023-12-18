@@ -97,5 +97,5 @@ public class Autor : InfosGenericas
 	/// </summary>
 	/// <param name="livros">Livros a serem adicionados a lista.</param>
 	public void AdicionarLivros ( params Livro[] livros ) =>
-		this.livros = livros.SelectList( l => l.PegarBsonid( ) );
+		this.livros = livros.SelectList( l => l.PegarId( ) );
 }

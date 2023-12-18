@@ -11,6 +11,7 @@ public static class DataBase
 
 	public const string LIVROS_COLECAO = "Livros";
 	public const string LIVRO_TITULO = "Titulo";
+	public const string LIVRO_SITUACAO = "Situação";
 	public const string LIVRO_LANCAMENTO = "Lançamento";
 	public const string LIVRO_ARQUIVO = "Arquivo";
 

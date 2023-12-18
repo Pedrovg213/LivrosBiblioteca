@@ -33,6 +33,6 @@ public class InfosGenericas
 	/// Pega o código único de identificação do elemento.
 	/// </summary>
 	/// <returns>Código de identificação (ObjectId) do elemento.</returns>
-	public ObjectId PegarBsonid () =>
+	public ObjectId PegarId () =>
 		BsonId;
 }

@@ -1,4 +1,5 @@
-﻿using LivrosBiblioteca.Servicos;
+﻿using LivrosBiblioteca.Enums;
+using LivrosBiblioteca.Servicos;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -18,6 +19,16 @@ public class Livro : InfosGenericas
 	}
 
 	/// <summary>
+	/// Situação atual de leitura do livro <br></br>
+	///	1. Aguardando: livro ainda não teve sua leitura iniciado; <br></br>
+	///	2. Iniciado: livro começou a ser lido; <br></br>
+	///	3. Finalizado: a leitura do livro foi encerrada; <br></br>
+	///	4. Desistência: Não há mais intenção de continuidade na leitura do livro.
+	/// </summary>
+	[BsonElement(DataBase.LIVRO_SITUACAO)]
+	private LeituraSituacao situacao;
+
+	/// <summary>
 	/// Dia, mês e ano de lançamentodo livro.
 	/// </summary>
 	[BsonElement( DataBase.LIVRO_LANCAMENTO )]
@@ -26,6 +37,9 @@ public class Livro : InfosGenericas
 		get; set;
 	}
 
+	/// <summary>
+	/// Caminho no sistema para o arquivo correspondênte ao livro.
+	/// </summary>
 	[BsonElement( DataBase.LIVRO_ARQUIVO )]
 	private string arquivo
 	{
@@ -42,4 +56,99 @@ public class Livro : InfosGenericas
 		get => Contidos;
 		set => Contidos = value;
 	}
+
+
+	// CONTRUTORES: private
+
+	/// <summary>
+	/// Construtor base da classe.
+	/// </summary>
+	private Livro ()
+	{
+		if (BsonId == ObjectId.Empty)
+			BsonId = ObjectId.GenerateNewId( );
+	}
+
+	// CONSTRUTORES: public
+
+	/// <summary>
+	/// Construtor para quando houver apenas título para a obra.
+	/// </summary>
+	/// <param name="titulo">Título da obra.</param>
+	/// <param name="situacao">Situação atual da leitura.</param>
+	public Livro ( string titulo, LeituraSituacao situacao ) : this( )
+	{
+		this.titulo = titulo;
+		this.situacao = situacao;
+	}
+
+	/// <summary>
+	/// Construtor para quando ouvir apenas título, situção de leitura e autores.
+	/// </summary>
+	/// <param name="titulo">Titulo da obra.</param>
+	/// <param name="situacao">Situação atual da leitura.</param>
+	/// <param name="autores">Autores que escreveram a obra.</param>
+	public Livro ( string titulo, LeituraSituacao situacao, List<ObjectId> autores ) : this( titulo, situacao ) =>
+		this.autores = autores;
+
+	/// <summary>
+	/// Construtor para quando houver apenas título, situação de leitura e data de lançamento da obra.
+	/// </summary>
+	/// <param name="titulo">Título da obra.</param>
+	/// <param name="situacao">Situação atual da leitura.</param>
+	/// <param name="lancamento">Data de lançamento da obra.</param>
+	public Livro ( string titulo, LeituraSituacao situacao, DateTime lancamento ) : this( titulo, situacao ) =>
+		this.lancamento = lancamento;
+
+	/// <summary>
+	/// Construtor para quando houver apenas titulo, situação de leitura e caminho de arquivo.
+	/// </summary>
+	/// <param name="titulo">Título da obra.</param>
+	/// <param name="situacao">Situação atual da leitura.</param>
+	/// <param name="arquivo">Caminho para o arquivo da obra no sistema.</param>
+	public Livro ( string titulo, LeituraSituacao situacao, string arquivo ) : this( titulo, situacao ) =>
+		this.arquivo = arquivo;
+
+	/// <summary>
+	/// Construtor para quando houver titulo, situação de leitura, caminho de arquivo e autores da obra.
+	/// </summary>
+	/// <param name="titulo">Título da obra.</param>
+	/// <param name="situacao">Situação atual da leitura.</param>
+	/// <param name="arquivo">Caminho para o arquivo da obra no sistema.</param>
+	/// <param name="autores">Autores que escreveram a obra.</param>
+
+	public Livro ( string titulo, LeituraSituacao situacao, string arquivo, List<ObjectId> autores ) : this( titulo, situacao, autores ) =>
+		this.arquivo = arquivo;
+
+	/// <summary>
+	/// Construtor para quando houver título, situação de leitura, caminho de arquivo e data de lançamento.
+	/// </summary>
+	/// <param name="titulo">Título da obra.</param>
+	/// <param name="situacao">Situação atual da leitura.</param>
+	/// <param name="arquivo">Caminho para o arquivo da obra no sistema.</param>
+	/// <param name="lancamento">Data de lançamento da obra.</param>
+
+	public Livro ( string titulo, LeituraSituacao situacao, string arquivo, DateTime lancamento ) : this( titulo, situacao, lancamento ) =>
+		this.arquivo = arquivo;
+
+	/// <summary>
+	/// Construtor para quando houver titulo, lista de autores e data de lançamento.
+	/// </summary>
+	/// <param name="titulo">Titulo da obra.</param>
+	/// <param name="situacao">Situação atual da leitura.</param>
+	/// <param name="autores">Autores da obra.</param>
+	/// <param name="lancamento">Data de lançamento da obra.</param>
+	public Livro ( string titulo, LeituraSituacao situacao, List<ObjectId> autores, DateTime lancamento ) : this( titulo, situacao, autores ) =>
+		this.lancamento = lancamento;
+
+	/// <summary>
+	/// Construtor para quando houver todas as variáveis do livro.
+	/// </summary>
+	/// <param name="titulo">Título da obra.</param>
+	/// <param name="situacao">Situação atual da leitura.</param>
+	/// <param name="arquivo">Caminho para o arquivo da obra no sistema.</param>
+	/// <param name="autores">Autores que escreveram a obra.</param>
+	/// <param name="lancamento">Data de lançamento da obra.</param>
+	public Livro ( string titulo, LeituraSituacao situacao, string arquivo, List<ObjectId> autores, DateTime lancamento ) : this( titulo, situacao, arquivo, autores ) =>
+		this.lancamento = lancamento;
 }

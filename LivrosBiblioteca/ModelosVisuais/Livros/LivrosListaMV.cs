@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using LivrosBiblioteca.Entidades;
 using LivrosBiblioteca.PopUps;
 using System.Collections.ObjectModel;
 
@@ -27,7 +28,7 @@ public partial class LivrosListaMV : ListasModeloVisual
 	/// </summary>
 	private void ResetarAdicionarLivroPopUp ()
 	{
-		AdicionarPage = new AdicionarLivroPopUp( );
+		AdicionarPage = new AdicionarLivroPopUp( AdicionarLivro );
 
 		AdicionarPage.Unloaded += AdicionarLivroPopUp_Unloaded;
 	}
@@ -39,4 +40,9 @@ public partial class LivrosListaMV : ListasModeloVisual
 	/// </summary>
 	private void AdicionarLivroPopUp_Unloaded ( object _sender, EventArgs _e ) =>
 		ResetarAdicionarLivroPopUp( );
+
+
+	private void AdicionarLivro ( Livro livro ) =>
+		LivrosEsperando.Add( new LivroMV(livro, this) );
+
 }
