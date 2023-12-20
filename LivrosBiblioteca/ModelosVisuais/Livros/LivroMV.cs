@@ -20,7 +20,7 @@ public partial class LivroMV : ModeloVisual
 	/// <summary>
 	/// Página que contém todos os livros.
 	/// </summary>
-	private LivrosListaMV livrosListaMV;
+	private LivrosListaBaseMV livrosListaMV;
 
 	// VARIÁVEIS: private ObservableProperty
 
@@ -54,7 +54,7 @@ public partial class LivroMV : ModeloVisual
 
 
 	// CONSTRUTURES: public
-	public LivroMV ( Livro livro, LivrosListaMV livrosListaMV )
+	public LivroMV ( Livro livro, LivrosListaBaseMV livrosListaMV )
 	{
 		this.livro = livro;
 		this.livrosListaMV = livrosListaMV;
@@ -79,7 +79,7 @@ public partial class LivroMV : ModeloVisual
 		if (livrosListaMV.PegarOrdemAlfabetica( ))
 			Autores = autorMVs.OrderByObservableCollection( a => a.PegarNome( ) );
 		else
-			Autores = autorMVs.OrderByObservableCollection( a => a.PegarNascimento( ) )
+			Autores = autorMVs.OrderByObservableCollection( a => a.PegarNascimento( ) );
 	}
 
 	// FUNÇÕES: public

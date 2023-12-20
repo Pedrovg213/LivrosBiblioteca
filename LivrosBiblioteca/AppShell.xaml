@@ -7,9 +7,26 @@
 	   Shell.FlyoutBehavior="{OnPlatform Default=Flyout, WinUI=Locked}"
 	   Shell.FlyoutWidth="300">
 
-	<FlyoutItem Title="Livros">
-		<ShellContent ContentTemplate="{DataTemplate livros:LivrosListaPagina}"
-					  Route="LivrosListaPagina" />
+
+	<FlyoutItem Title="Livros"
+				FlyoutDisplayOptions="AsMultipleItems">
+
+		<ShellContent ContentTemplate="{DataTemplate livros:LivrosAguardandoPagina}"
+					  Title="Aguardando"
+					  Route="LivrosAguardandoPagina" />
+
+		<ShellContent ContentTemplate="{DataTemplate livros:LivrosIniciadosPagina}"
+					  Title="Iniciados"
+					  Route="LivrosIniciadosPagina" />
+
+		<ShellContent ContentTemplate="{DataTemplate livros:LivrosFinalizadosPagina}"
+					  Title="Finalizados"
+					  Route="LivrosFinalizadosPagina" />
+
+		<ShellContent ContentTemplate="{DataTemplate livros:LivrosAbandonadosPagina}"
+					  Title="Abandonados"
+					  Route="LivrosAbandonadosPagina" />
+
 	</FlyoutItem>
 
 	<FlyoutItem Title="Autores">

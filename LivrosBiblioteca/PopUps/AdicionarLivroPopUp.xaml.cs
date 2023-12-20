@@ -1,4 +1,5 @@
 using LivrosBiblioteca.Entidades;
+using LivrosBiblioteca.Enums;
 using LivrosBiblioteca.Eventos;
 using LivrosBiblioteca.Extensoes;
 using LivrosBiblioteca.Servicos;
@@ -29,6 +30,11 @@ public partial class AdicionarLivroPopUp
 	/// Lista de informações que devem ser usadas para compor os autores da obra.
 	/// </summary>
 	private List<AutorInfo> autoresInfo = new List<AutorInfo>();
+
+	/// <summary>
+	/// Situação de leitura de livro a ser adicionado.
+	/// </summary>
+	private LeituraSituacao situacao;
 
 
 	// MÉTODOS: private
@@ -81,7 +87,7 @@ public partial class AdicionarLivroPopUp
 	/// <summary>
 	/// Inicialização dos componentes.
 	/// </summary>
-	public AdicionarLivroPopUp ( EventAdicionarLivro adicionarLivroEvento )
+	public AdicionarLivroPopUp ( EventAdicionarLivro adicionarLivroEvento, LeituraSituacao leituraSituacao )
 	{
 		InitializeComponent( );
 
@@ -89,6 +95,7 @@ public partial class AdicionarLivroPopUp
 		autoresInfo.Add( new( searchBar, nascimentoEty, morteEty ) );
 
 		AdicionarLivroEvento = adicionarLivroEvento;
+		situacao = leituraSituacao;
 	}
 
 
@@ -404,11 +411,11 @@ public partial class AdicionarLivroPopUp
 				if (string.IsNullOrEmpty( livroCaminho ))
 					livro = new Livro(
 						  tituloLivro,
-						  Enums.LeituraSituacao.Aguardando );
+						  situacao );
 				else
 					livro = new Livro(
 						  tituloLivro,
-						  Enums.LeituraSituacao.Aguardando,
+						  situacao,
 						  livroCaminho );
 			}
 			// Se houver data de lançamento
@@ -419,12 +426,12 @@ public partial class AdicionarLivroPopUp
 				if (string.IsNullOrEmpty( livroCaminho ))
 					livro = new Livro(
 						tituloLivro,
-						Enums.LeituraSituacao.Aguardando,
+						situacao,
 						lancamento );
 				else
 					livro = new Livro(
 						tituloLivro,
-						Enums.LeituraSituacao.Aguardando,
+						situacao,
 						livroCaminho,
 						lancamento );
 			}
@@ -438,12 +445,12 @@ public partial class AdicionarLivroPopUp
 				if (string.IsNullOrEmpty( livroCaminho ))
 					livro = new Livro(
 						 tituloLivro,
-						 Enums.LeituraSituacao.Aguardando,
+						 situacao,
 						 autores.SelectList( a => a.PegarId( ) ) );
 				else
 					livro = new Livro(
 						 tituloLivro,
-						 Enums.LeituraSituacao.Aguardando,
+						 situacao,
 						 livroCaminho,
 						 autores.SelectList( a => a.PegarId( ) ) );
 			}
@@ -455,13 +462,13 @@ public partial class AdicionarLivroPopUp
 				if (string.IsNullOrEmpty( livroCaminho ))
 					livro = new Livro(
 						 tituloLivro,
-						 Enums.LeituraSituacao.Aguardando,
+						 situacao,
 						 autores.SelectList( a => a.PegarId( ) ),
 						 lancamento );
 				else
 					livro = new Livro(
 						 tituloLivro,
-						 Enums.LeituraSituacao.Aguardando,
+						 situacao,
 						 livroCaminho,
 						 autores.SelectList( a => a.PegarId( ) ),
 						 lancamento );

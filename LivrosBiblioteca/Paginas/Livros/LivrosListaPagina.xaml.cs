@@ -4,12 +4,10 @@ namespace LivrosBiblioteca.Paginas.Livros;
 
 public partial class LivrosListaPagina : ContentPage
 {
-	// VARIÁVEIS: private
-
 	/// <summary>
 	/// Modelo Visual com os controles e variáveis da página
 	/// </summary>
-	private LivrosListaMV livrosListaMV;
+	protected LivrosListaBaseMV livrosListaMV;
 
 
 	// CONTRUTORES
@@ -17,11 +15,6 @@ public partial class LivrosListaPagina : ContentPage
 	/// <summary>
 	/// Construtor padrão.
 	/// </summary>
-	public LivrosListaPagina ()
-	{
+	public LivrosListaPagina () =>
 		InitializeComponent( );
-
-		livrosListaMV = new LivrosListaMV( );
-		BindingContext = livrosListaMV;
-	}
 }
