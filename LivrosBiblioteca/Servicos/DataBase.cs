@@ -13,11 +13,14 @@ public static class DataBase
 	public const string LIVRO_TITULO = "Titulo";
 	public const string LIVRO_SITUACAO = "Situação";
 	public const string LIVRO_LANCAMENTO = "Lançamento";
+	public const string LIVRO_LANCAMENTOAC = "Lançamento AC";
 	public const string LIVRO_ARQUIVO = "Arquivo";
 
 	public const string AUTORES_COLECAO = "Autores";
 	public const string AUTOR_NOME = "Nome";
 	public const string AUTOR_NASCIMENTO = "Nascimento";
+	public const string AUTOR_NASCIMENTOAC = "Nascimento AC";
+	public const string AUTOR_MORTEAC = "Morte AC";
 	public const string AUTOR_MORTE = "Morte";
 
 

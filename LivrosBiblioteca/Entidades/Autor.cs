@@ -1,7 +1,7 @@
 ﻿using LivrosBiblioteca.Servicos;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using SeletorLivros.Extensoes;
+using LivrosBiblioteca.Extensoes;
 
 namespace LivrosBiblioteca.Entidades;
 

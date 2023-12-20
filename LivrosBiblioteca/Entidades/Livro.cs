@@ -38,6 +38,17 @@ public class Livro : InfosGenericas
 	}
 
 	/// <summary>
+	/// Identifica se o lançamento da obra foi feito antes de Cristo. <br></br>
+	///	TRUE: Antes de Cristo. <br></br>
+	///	FALSE: Depois de Cristo.
+	/// </summary>
+	[BsonElement( DataBase.LIVRO_LANCAMENTOAC )]
+	private bool lancamentoAC
+	{
+		get; set;
+	}
+
+	/// <summary>
 	/// Caminho no sistema para o arquivo correspondênte ao livro.
 	/// </summary>
 	[BsonElement( DataBase.LIVRO_ARQUIVO )]
@@ -151,4 +162,54 @@ public class Livro : InfosGenericas
 	/// <param name="lancamento">Data de lançamento da obra.</param>
 	public Livro ( string titulo, LeituraSituacao situacao, string arquivo, List<ObjectId> autores, DateTime lancamento ) : this( titulo, situacao, arquivo, autores ) =>
 		this.lancamento = lancamento;
+
+
+	// FUNÇÕES: public
+
+	/// <summary>
+	/// Pegar o caminho no sistema para o arquivo do livro.
+	/// </summary>
+	/// <returns>Caminho no sistema do arquivo (string)</returns>
+	public string PegarArquivo () =>
+		arquivo;
+
+	/// <summary>
+	/// Pegar lista de identidade dos autores que escreveram o livro.
+	/// </summary>
+	/// <returns>Identidades (ObjectId) dos autores que escreveram o livro.</returns>
+	public List<ObjectId> PegarAutoresIds () =>
+		autores;
+
+	/// <summary>
+	/// Pegar data de lançamento do livro.
+	/// </summary>
+	/// <returns>Lançamento (DateTime) do livro.</returns>
+	public DateTime PegarLancamento () =>
+		lancamento;
+
+	/// <summary>
+	/// Pega a situação atual do livro.
+	/// </summary>
+	/// <returns>Situação atual (enum) do livro.</returns>
+	public LeituraSituacao PegarSituação () =>
+		situacao;
+
+	/// <summary>
+	/// Pega o título do livro.
+	/// </summary>
+	/// <returns>Título (string) da obra.</returns>
+	public string PegarTitulo () =>
+		titulo;
+
+	// FUNÇÕES: public override
+
+	public override bool Equals ( object obj )
+	{
+		Livro outro = (Livro)obj;
+
+		return PegarId( ).Equals( outro.PegarId( ) );
+	}
+
+	public override int GetHashCode () =>
+		PegarId( ).GetHashCode( );
 }

@@ -1,4 +1,4 @@
-﻿namespace LivrosBiblioteca.Extensões;
+﻿namespace LivrosBiblioteca.Extensoes;
 
 public static class StringExtensions
 {

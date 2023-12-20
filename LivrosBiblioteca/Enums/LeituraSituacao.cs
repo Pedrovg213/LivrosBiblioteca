@@ -17,5 +17,5 @@ public enum LeituraSituacao
 	/// <summary>
 	/// Não há mais intenção de continuidade na leitura do livro.
 	/// </summary>
-	Desistencia
+	Abandonado
 }

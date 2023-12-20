@@ -1,23 +1,43 @@
 using LivrosBiblioteca.Entidades;
 using LivrosBiblioteca.Eventos;
-using LivrosBiblioteca.Extensões;
+using LivrosBiblioteca.Extensoes;
 using LivrosBiblioteca.Servicos;
 using Mopups.Services;
-using SeletorLivros.Extensoes;
 
 namespace LivrosBiblioteca.PopUps;
 
 public partial class AdicionarLivroPopUp
 {
 	// VARIÁVEIS: private
+
+	/// <summary>
+	/// Caminho, no sistema, do arquivo do livro.
+	/// </summary>
 	private string livroCaminho;
+
+	/// <summary>
+	/// Listas de barras de pesquisas de autores
+	/// </summary>
 	private List<ListView> autoresListViews = new List<ListView>();
+
+	/// <summary>
+	/// Lista de elementos que guardam os elementos que compõem as entradas de novos autores.
+	/// </summary>
 	private List<VerticalStackLayout> stackNovosAutores = new List<VerticalStackLayout>();
+
+	/// <summary>
+	/// Lista de informações que devem ser usadas para compor os autores da obra.
+	/// </summary>
 	private List<AutorInfo> autoresInfo = new List<AutorInfo>();
 
 
 	// MÉTODOS: private
+
+	/// <summary>
+	/// Evento de adição de livro na página de livros.
+	/// </summary>
 	private EventAdicionarLivro AdicionarLivroEvento;
+
 
 	// CLASSES: private
 	private class AutorInfo
@@ -73,6 +93,10 @@ public partial class AdicionarLivroPopUp
 
 
 	// FUNÇÕES: private Elementos
+
+	/// <summary>
+	/// Função que é executada quando uma barra de pesquisa tem seu texto alterado.
+	/// </summary>
 	private void SearchBar_TextChanged ( object sender, TextChangedEventArgs e )
 	{
 		SearchBar searchBar = (SearchBar)sender;
@@ -82,6 +106,9 @@ public partial class AdicionarLivroPopUp
 		autoresListViews[index].ItemsSource = DataBase.ProcurarAutoresPorNome( searchBar.Text );
 	}
 
+	/// <summary>
+	/// Função que força os espaços de entradas de datas a manterem um padrão (dd/mm/yyyy)
+	/// </summary>
 	private void DateEntry_TextChanged ( object sender, TextChangedEventArgs e )
 	{
 		char[] caracteresPermitidos =
@@ -158,6 +185,9 @@ public partial class AdicionarLivroPopUp
 		entry.Text = novoTexto;
 	}
 
+	/// <summary>
+	/// Quando uma entrada de data é focada.
+	/// </summary>
 	private void Entry_Unfocused ( object sender, FocusEventArgs e )
 	{
 		Entry entry = (Entry)sender;
@@ -172,6 +202,9 @@ public partial class AdicionarLivroPopUp
 			entry.Focus( );
 	}
 
+	/// <summary>
+	/// Função acionada quando o botão de adicionar novo autor é clicado.
+	/// </summary>
 	private void AdicionarAutor_BtnClick ( object sender, EventArgs e )
 	{
 		VerticalStackLayout autorSlt = new VerticalStackLayout();
@@ -284,6 +317,9 @@ public partial class AdicionarLivroPopUp
 		nomeAutorSBR.Focus( );
 	}
 
+	/// <summary>
+	/// Função acionada quando o botão de procurar pelo arquivo do livro no sistema é clicado.
+	/// </summary>
 	private async void ProcurarArquivo_BtnClick ( object sender, EventArgs e )
 	{
 		FilePickerFileType fileType = new (new Dictionary<DevicePlatform, IEnumerable<string>>
@@ -308,6 +344,9 @@ public partial class AdicionarLivroPopUp
 		livroCaminho = result.FullPath;
 	}
 
+	/// <summary>
+	/// Função acionada quando o botão de limpar as informações for clicado.
+	/// </summary>
 	private void Limpar_BtnClick ( object sender, EventArgs e )
 	{
 		tituloEty.Text = string.Empty;
@@ -326,12 +365,18 @@ public partial class AdicionarLivroPopUp
 			autoresInfo.RemoveAt( i );
 	}
 
+	/// <summary>
+	/// Função acionada quando o botão de cancelar adição de livro for clicado.
+	/// </summary>
 	private async void Cancelar_BtnClick ( object sender, EventArgs e )
 	{
 		if (MopupService.Instance.PopupStack.Count > 0)
 			await MopupService.Instance.PopAsync( );
 	}
 
+	/// <summary>
+	/// Função acionada quando o botão de finalização de adição de livro (OK) for clicado.
+	/// </summary>
 	private async void Ok_BtnClick ( object sender, EventArgs e )
 	{
 		string tituloLivro = tituloEty.Text;
