@@ -1,9 +1,13 @@
 ﻿using LivrosBiblioteca.Entidades;
+using MongoDB.Driver;
 
 namespace LivrosBiblioteca.Servicos;
 
-public static class DataBase
+public class DataBase
 {
+	// CONSTANTES: private
+	private const string DATABASE_NOME = "LivrosBiblioteca";
+
 	// CONSTANTES: public
 	public const string CONTIDOS_ID = "Contidos Id";
 
@@ -26,11 +30,18 @@ public static class DataBase
 
 	// VARIÁVEIS: private static
 
+	private static MongoClient clienteMongo = new MongoClient();
+	private static IMongoDatabase dataBase = PegarDataBase();
+
 	/// <summary>
 	/// Lista de autores que deve corresponder com o salvo no sistema.
 	/// </summary>
 	private static List<Autor> autores = new List<Autor>();
 
+
+	// FUNÇÕES: private static
+	private static IMongoDatabase PegarDataBase () =>
+		clienteMongo.GetDatabase( DATABASE_NOME );
 
 	// FUNÇÕES: public static
 
