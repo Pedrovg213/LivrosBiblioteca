@@ -3,6 +3,7 @@ using LivrosBiblioteca.Entidades;
 using LivrosBiblioteca.Enums;
 using LivrosBiblioteca.Extensoes;
 using LivrosBiblioteca.PopUps;
+using LivrosBiblioteca.Servicos;
 using System.Collections.ObjectModel;
 
 namespace LivrosBiblioteca.ModelosVisuais.Livros;
@@ -45,6 +46,8 @@ public partial class LivrosListaBaseMV : ListasModeloVisual
 		LivrosColecao.Add( livroMV );
 
 		ReordenarLivros( );
+
+		DataBase.AdicionarLivro( livro );
 	}
 
 	/// <summary>

@@ -1,7 +1,7 @@
-﻿using LivrosBiblioteca.Servicos;
+﻿using LivrosBiblioteca.Extensoes;
+using LivrosBiblioteca.Servicos;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using LivrosBiblioteca.Extensoes;
 
 namespace LivrosBiblioteca.Entidades;
 
@@ -28,10 +28,28 @@ public class Autor : InfosGenericas
 	}
 
 	/// <summary>
+	/// Identifica se o nascimento do autor foi antes ou depois do nascimento de Cristo
+	/// </summary>
+	[BsonElement( DataBase.AUTOR_NASCIMENTOAC )]
+	private bool nascimentoAC
+	{
+		get; set;
+	}
+
+	/// <summary>
 	/// Dia, mês e ano de morte do autor.
 	/// </summary>
 	[BsonElement( DataBase.AUTOR_MORTE )]
 	private DateTime morte
+	{
+		get; set;
+	}
+
+	/// <summary>
+	/// Identifica se a morte do autor foi antes ou depois do nascimento de Cristo.
+	/// </summary>
+	[BsonElement( DataBase.AUTOR_MORTEAC )]
+	private bool morteAC
 	{
 		get; set;
 	}
@@ -86,16 +104,48 @@ public class Autor : InfosGenericas
 	// FUNÇÕES: public
 
 	/// <summary>
-	/// Pega o nome do autor.
-	/// </summary>
-	/// <returns>Retorna o nome (string) do autor.</returns>
-	public string PegarNome () =>
-		nome;
-
-	/// <summary>
 	/// Adicionar livros na lista de livros que o autor escreveu.
 	/// </summary>
 	/// <param name="livros">Livros a serem adicionados a lista.</param>
 	public void AdicionarLivros ( params Livro[] livros ) =>
 		this.livros = livros.SelectList( l => l.PegarId( ) );
+
+	/// <summary>
+	/// Pega lista de identidade dos livros que foram escritos por este autor.
+	/// </summary>
+	/// <returns>Identidades (ObjectId) dos livros que foram escritos por este autor.</returns>
+	public List<ObjectId> PegarLivrosIds () =>
+		livros;
+
+	/// <summary>
+	/// Pega a data de morte do autor.
+	/// </summary>
+	public DateTime PegarMorte () =>
+		morte;
+
+	/// <summary>
+	/// Pega a variável que identifica se o autor morreu antes ou depois de do nascimento de Cristo.
+	/// </summary>
+	/// <returns></returns>
+	public bool PegarMorteAC () =>
+		morteAC;
+
+	/// <summary>
+	/// Pega a data de nascimento do autor.
+	/// </summary>
+	public DateTime PegarNascimento () =>
+		nascimento;
+
+	/// <summary>
+	/// Pega a variável que identifica se o autor nasceu antes ou depois de Cristo.
+	/// </summary>
+	public bool PegarNascimentoAC () =>
+		nascimentoAC;
+
+	/// <summary>
+	/// Pega o nome do autor.
+	/// </summary>
+	/// <returns>Retorna o nome (string) do autor.</returns>
+	public string PegarNome () =>
+		nome;
 }

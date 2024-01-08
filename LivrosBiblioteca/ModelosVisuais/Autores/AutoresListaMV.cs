@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
 
 namespace LivrosBiblioteca.ModelosVisuais.Autores;
 public partial class AutoresListaMV : ListasModeloVisual

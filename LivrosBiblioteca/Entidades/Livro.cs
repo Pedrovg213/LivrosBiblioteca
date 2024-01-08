@@ -188,6 +188,12 @@ public class Livro : InfosGenericas
 		lancamento;
 
 	/// <summary>
+	/// Pega o identificador de a obra ter sido lançada antes de Cristo.
+	/// </summary>
+	public bool PegarLancamentoAC () =>
+		lancamentoAC;
+
+	/// <summary>
 	/// Pega a situação atual do livro.
 	/// </summary>
 	/// <returns>Situação atual (enum) do livro.</returns>

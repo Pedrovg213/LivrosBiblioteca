@@ -73,11 +73,18 @@ public partial class AdicionarLivroPopUp
 			if (string.IsNullOrEmpty( morteData.Text ))
 			{
 				DateTime morte = morteData.Text.ConverterParaDateTime();
+				Autor autorTemp = new Autor( nome.Text, nascimento, morte );
 
-				return new Autor( nome.Text, nascimento, morte );
+				DataBase.AdicionarAutor( autorTemp );
+
+				return autorTemp;
 			}
 
-			return new Autor( nome.Text, nascimento );
+			Autor autor = new Autor( nome.Text, nascimento );
+
+			DataBase.AdicionarAutor( autor );
+
+			return autor;
 		}
 	}
 
@@ -229,7 +236,7 @@ public partial class AdicionarLivroPopUp
 		// NUMERAÇÃO DO AUTOR
 		Label numLbl = new Label();
 
-		numLbl.Text = $"Autor {(autoresListViews.Count + 1).ToString( "00" )}";
+		numLbl.Text = $"Autor {(autoresInfo.Count + 1).ToString( "00" )}";
 		numLbl.HorizontalOptions = LayoutOptions.Center;
 		numLbl.HorizontalTextAlignment = TextAlignment.Center;
 
@@ -369,7 +376,10 @@ public partial class AdicionarLivroPopUp
 		autor01Lbl.IsVisible = autoresListViews.Count > 1;
 
 		for (int i = 1 ; i < autoresInfo.Count ; i++)
+		{
 			autoresInfo.RemoveAt( i );
+			autoresListViews.RemoveAt( i );
+		}
 	}
 
 	/// <summary>

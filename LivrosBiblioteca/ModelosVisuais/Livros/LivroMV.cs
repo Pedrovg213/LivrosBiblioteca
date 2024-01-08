@@ -68,7 +68,7 @@ public partial class LivroMV : ModeloVisual
 		Titulo = livro.PegarTitulo( );
 		Situacao = livro.PegarSituação( );
 		Arquivo = livro.PegarArquivo( );
-		IEnumerable<Autor> autores = DataBase.PegaAutores( )
+		IEnumerable<Autor> autores = DataBase.PegarAutores( )
 			.Where( a => livro.PegarAutoresIds( ).Contains( a.PegarId( ) ) );
 
 		ObservableCollection<AutorMV> autorMVs = new ObservableCollection<AutorMV>();

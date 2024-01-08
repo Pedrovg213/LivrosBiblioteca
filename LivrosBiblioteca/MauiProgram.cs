@@ -1,5 +1,4 @@
-﻿using LivrosBiblioteca.Servicos;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
 
 namespace LivrosBiblioteca;
@@ -7,15 +6,17 @@ public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp ()
 	{
-		var builder = MauiApp.CreateBuilder();
+		MauiAppBuilder builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>( )
 			.ConfigureMopups( )
 			.ConfigureFonts( fonts =>
 			{
-				fonts.AddFont( "OpenSans-Regular.ttf", "OpenSansRegular" );
-				fonts.AddFont( "OpenSans-Semibold.ttf", "OpenSansSemibold" );
+				fonts.AddFont( "pala.ttf", "Palatino" );
+				fonts.AddFont( "palab.ttf", "PalatinoBold" );
+				fonts.AddFont( "PALAI.TTF", "PalatinoItalico" );
 			} );
+
 
 #if DEBUG
 		builder.Logging.AddDebug( );

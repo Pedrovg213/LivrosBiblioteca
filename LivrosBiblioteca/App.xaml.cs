@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace LivrosBiblioteca;
+﻿namespace LivrosBiblioteca;
 
 public partial class App : Application
 {
@@ -9,5 +7,6 @@ public partial class App : Application
 		InitializeComponent( );
 
 		MainPage = new AppShell( );
+
 	}
 }

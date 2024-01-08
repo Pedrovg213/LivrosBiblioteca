@@ -4,7 +4,7 @@ namespace LivrosBiblioteca.Paginas.Livros;
 
 public class LivrosAguardandoPagina : LivrosListaPagina
 {
-	public LivrosAguardandoPagina() : base()
+	public LivrosAguardandoPagina () : base( )
 	{
 		livrosListaMV = new LivrosAguardandoMV( );
 		BindingContext = livrosListaMV;

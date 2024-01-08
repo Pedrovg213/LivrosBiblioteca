@@ -76,7 +76,7 @@
 									   HorizontalOptions="Center"
 									   HorizontalTextAlignment="Center"
 									   Text="Autor 01"
-									   IsVisible="False" />
+									   IsVisible="False"/>
 								<SearchBar x:Name="searchBar"
 										   HorizontalTextAlignment="Center"
 										   Placeholder="Nome do Autor"
