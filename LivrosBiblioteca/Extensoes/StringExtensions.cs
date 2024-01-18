@@ -8,9 +8,13 @@ public static class StringExtensions
 	/// <param name="texto">Texto para ser convertido em data.</param>
 	public static DateTime ConverterParaDateTime ( this string texto )
 	{
-		string[] dataString = texto.Split(' ');
+		string[] dataString = texto.Split(' ')[0].Split('/');
 
-		return DateTime.Parse( dataString[1] );
+		int dia = int.Parse(dataString[0]);
+		int mes = int.Parse(dataString[1]);
+		int ano = int.Parse(dataString[2]);
+
+		return new DateTime( ano, mes, dia );
 	}
 
 	/// <summary>

@@ -1,4 +1,6 @@
-﻿namespace LivrosBiblioteca;
+﻿using LivrosBiblioteca.Servicos;
+
+namespace LivrosBiblioteca;
 
 public partial class App : Application
 {
@@ -8,5 +10,11 @@ public partial class App : Application
 
 		MainPage = new AppShell( );
 
+		DataBase.IniciarDataBase( );
+
+		MainPage.Unloaded += MainPagseUnloaded;
 	}
+
+	private void MainPagseUnloaded ( object sender, EventArgs e ) =>
+		DataBase.EncerrarDataBase( );
 }

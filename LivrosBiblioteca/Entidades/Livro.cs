@@ -1,4 +1,5 @@
 ﻿using LivrosBiblioteca.Enums;
+using LivrosBiblioteca.Extensoes;
 using LivrosBiblioteca.Servicos;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -32,7 +33,7 @@ public class Livro : InfosGenericas
 	/// Dia, mês e ano de lançamentodo livro.
 	/// </summary>
 	[BsonElement( DataBase.LIVRO_LANCAMENTO )]
-	private DateTime lancamento
+	private int lancamento
 	{
 		get; set;
 	}
@@ -74,10 +75,8 @@ public class Livro : InfosGenericas
 	/// <summary>
 	/// Construtor base da classe.
 	/// </summary>
-	private Livro ()
+	private Livro () : base( )
 	{
-		if (BsonId == ObjectId.Empty)
-			BsonId = ObjectId.GenerateNewId( );
 	}
 
 	// CONSTRUTORES: public
@@ -98,9 +97,16 @@ public class Livro : InfosGenericas
 	/// </summary>
 	/// <param name="titulo">Titulo da obra.</param>
 	/// <param name="situacao">Situação atual da leitura.</param>
-	/// <param name="autores">Autores que escreveram a obra.</param>
-	public Livro ( string titulo, LeituraSituacao situacao, List<ObjectId> autores ) : this( titulo, situacao ) =>
-		this.autores = autores;
+	/// <param name="autoresIds">Autores que escreveram a obra.</param>
+	public Livro ( string titulo, LeituraSituacao situacao, List<ObjectId> autoresIds ) : this( titulo, situacao )
+	{
+		autores = autores.ConcatList( autoresIds );
+
+		IEnumerable<Autor> autoresTemp = DataBase.PegarAutores();
+
+		foreach (Autor autor in autoresTemp)
+			autor.AdicionarLivros( this );
+	}
 
 	/// <summary>
 	/// Construtor para quando houver apenas título, situação de leitura e data de lançamento da obra.
@@ -108,7 +114,7 @@ public class Livro : InfosGenericas
 	/// <param name="titulo">Título da obra.</param>
 	/// <param name="situacao">Situação atual da leitura.</param>
 	/// <param name="lancamento">Data de lançamento da obra.</param>
-	public Livro ( string titulo, LeituraSituacao situacao, DateTime lancamento ) : this( titulo, situacao ) =>
+	public Livro ( string titulo, LeituraSituacao situacao, int lancamento ) : this( titulo, situacao ) =>
 		this.lancamento = lancamento;
 
 	/// <summary>
@@ -139,7 +145,7 @@ public class Livro : InfosGenericas
 	/// <param name="arquivo">Caminho para o arquivo da obra no sistema.</param>
 	/// <param name="lancamento">Data de lançamento da obra.</param>
 
-	public Livro ( string titulo, LeituraSituacao situacao, string arquivo, DateTime lancamento ) : this( titulo, situacao, lancamento ) =>
+	public Livro ( string titulo, LeituraSituacao situacao, string arquivo, int lancamento ) : this( titulo, situacao, lancamento ) =>
 		this.arquivo = arquivo;
 
 	/// <summary>
@@ -149,7 +155,7 @@ public class Livro : InfosGenericas
 	/// <param name="situacao">Situação atual da leitura.</param>
 	/// <param name="autores">Autores da obra.</param>
 	/// <param name="lancamento">Data de lançamento da obra.</param>
-	public Livro ( string titulo, LeituraSituacao situacao, List<ObjectId> autores, DateTime lancamento ) : this( titulo, situacao, autores ) =>
+	public Livro ( string titulo, LeituraSituacao situacao, List<ObjectId> autores, int lancamento ) : this( titulo, situacao, autores ) =>
 		this.lancamento = lancamento;
 
 	/// <summary>
@@ -160,7 +166,7 @@ public class Livro : InfosGenericas
 	/// <param name="arquivo">Caminho para o arquivo da obra no sistema.</param>
 	/// <param name="autores">Autores que escreveram a obra.</param>
 	/// <param name="lancamento">Data de lançamento da obra.</param>
-	public Livro ( string titulo, LeituraSituacao situacao, string arquivo, List<ObjectId> autores, DateTime lancamento ) : this( titulo, situacao, arquivo, autores ) =>
+	public Livro ( string titulo, LeituraSituacao situacao, string arquivo, List<ObjectId> autores, int lancamento ) : this( titulo, situacao, arquivo, autores ) =>
 		this.lancamento = lancamento;
 
 
@@ -183,8 +189,8 @@ public class Livro : InfosGenericas
 	/// <summary>
 	/// Pegar data de lançamento do livro.
 	/// </summary>
-	/// <returns>Lançamento (DateTime) do livro.</returns>
-	public DateTime PegarLancamento () =>
+	/// <returns>Lançamento (int) do livro.</returns>
+	public int PegarLancamento () =>
 		lancamento;
 
 	/// <summary>

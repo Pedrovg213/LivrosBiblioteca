@@ -72,10 +72,8 @@ public class Autor : InfosGenericas
 	/// <summary>
 	/// Construtor padrão da classe.
 	/// </summary>
-	private Autor ()
+	private Autor () : base( )
 	{
-		if (BsonId == ObjectId.Empty)
-			BsonId = ObjectId.GenerateNewId( );
 	}
 
 	// CONSTRUTORES: public
@@ -100,6 +98,44 @@ public class Autor : InfosGenericas
 	public Autor ( string nome, DateTime nascimento, DateTime morte ) : this( nome, nascimento ) =>
 		this.morte = morte;
 
+	/// <summary>
+	/// Construtor usado para quando não há data de morte definida porém há apenas um livro a ser adicionado.
+	/// </summary>
+	/// <param name="nome">Nome do autor.</param>
+	/// <param name="nascimento">Data de nascimento do autor.</param>
+	/// <param name="livroId">Identidade do livro a ser adicionado.</param>
+	public Autor ( string nome, DateTime nascimento, ObjectId livroId ) : this( nome, nascimento ) =>
+		livros.Add( livroId );
+
+
+	/// <summary>
+	/// Construtor usado quando há data de morte definida e apenas um livro a ser adicionado.
+	/// </summary>
+	/// <param name="nome">Nome do autor.</param>
+	/// <param name="nascimento">Data de nascimento do autor.</param>
+	/// <param name="morte">Data de morte do autor.</param>
+	/// <param name="livroId">Identidade do livro a ser adicionado.</param>
+	public Autor ( string nome, DateTime nascimento, DateTime morte, ObjectId livroId ) : this( nome, nascimento, morte ) =>
+		Contidos.Add( livroId );
+
+	/// <summary>
+	/// Construtor usado quando não há data de morte definida e há uma lista de livros a ser adicionada.
+	/// </summary>
+	/// <param name="nome">Nome do autor.</param>
+	/// <param name="nascimento">Data de nascimento do autor.</param>
+	/// <param name="livrosId">Identidades dos livros a serem adicionados.</param>
+	public Autor ( string nome, DateTime nascimento, List<ObjectId> livrosId ) : this( nome, nascimento ) =>
+		livros = livros.ConcatList( livrosId );
+
+	/// <summary>
+	/// Construtor usado para quando há data de morte definida e há uma lista de livros a ser adicionada.
+	/// </summary>
+	/// <param name="nome">Nome do autor.</param>
+	/// <param name="nascimento">Data de nascimento do autor.</param>
+	/// <param name="morte">Data de morte do autor</param>
+	/// <param name="livrosId">Identidades dos livros a serem adicioonados.</param>
+	public Autor ( string nome, DateTime nascimento, DateTime morte, List<ObjectId> livrosId ) : this( nome, nascimento, morte ) =>
+		livros = livros.ConcatList( livrosId );
 
 	// FUNÇÕES: public
 
@@ -107,8 +143,12 @@ public class Autor : InfosGenericas
 	/// Adicionar livros na lista de livros que o autor escreveu.
 	/// </summary>
 	/// <param name="livros">Livros a serem adicionados a lista.</param>
-	public void AdicionarLivros ( params Livro[] livros ) =>
+	public void AdicionarLivros ( params Livro[] livros )
+	{
 		this.livros = livros.SelectList( l => l.PegarId( ) );
+
+		DataBase.AtualizarAutor( this );
+	}
 
 	/// <summary>
 	/// Pega lista de identidade dos livros que foram escritos por este autor.

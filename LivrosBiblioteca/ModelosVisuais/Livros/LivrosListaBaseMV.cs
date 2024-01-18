@@ -17,7 +17,7 @@ public partial class LivrosListaBaseMV : ListasModeloVisual
 	/// Coleção dos livros que comporão a página.
 	/// </summary>
 	[ObservableProperty]
-	protected ObservableCollection<LivroMV> livrosColecao;
+	protected ObservableCollection<LivroMV> livrosColecao = new ObservableCollection<LivroMV>();
 
 
 	// CONSTRUTORES: protected

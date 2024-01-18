@@ -88,7 +88,7 @@ public partial class LivroMV : ModeloVisual
 	/// Pegar data de lançamento do livro.
 	/// </summary>
 	/// <returns>Lançamento (DateTime) do livro.</returns>
-	public DateTime PegarLancamento () =>
+	public int PegarLancamento () =>
 		livro.PegarLancamento( );
 
 	/// <summary>

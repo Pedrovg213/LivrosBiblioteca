@@ -66,11 +66,11 @@ public partial class AdicionarLivroPopUp
 		/// <summary>
 		/// Converte as informações de autor para a classe Autor.
 		/// </summary>
-		public Autor ConverterParaAutor ()
+		public Autor ConverterParaAutor (  )
 		{
 			DateTime nascimento = nascimentoData.Text.ConverterParaDateTime();
 
-			if (string.IsNullOrEmpty( morteData.Text ))
+			if (!string.IsNullOrEmpty( morteData.Text ))
 			{
 				DateTime morte = morteData.Text.ConverterParaDateTime();
 				Autor autorTemp = new Autor( nome.Text, nascimento, morte );
@@ -200,7 +200,7 @@ public partial class AdicionarLivroPopUp
 	}
 
 	/// <summary>
-	/// Quando uma entrada de data é focada.
+	/// Quando uma entrada de data é desfocada.
 	/// </summary>
 	private void Entry_Unfocused ( object sender, FocusEventArgs e )
 	{
@@ -373,13 +373,14 @@ public partial class AdicionarLivroPopUp
 
 		stackNovosAutores.Clear( );
 
-		autor01Lbl.IsVisible = autoresListViews.Count > 1;
-
 		for (int i = 1 ; i < autoresInfo.Count ; i++)
 		{
 			autoresInfo.RemoveAt( i );
 			autoresListViews.RemoveAt( i );
 		}
+
+		autor01Lbl.IsVisible = autoresListViews.Count > 1;
+		autor01Lbl.Text = "Autor 01";
 	}
 
 	/// <summary>
@@ -413,7 +414,7 @@ public partial class AdicionarLivroPopUp
 
 
 		// Se não houver nenhum autor.
-		if (autores.Count <= 0)
+		if (autoresInfo.Count <= 0)
 		{
 			// Se não houver data de lançamento
 			if (string.IsNullOrEmpty( lancamentoEty.Text ))
@@ -431,7 +432,7 @@ public partial class AdicionarLivroPopUp
 			// Se houver data de lançamento
 			else
 			{
-				DateTime lancamento = lancamentoEty.Text.ConverterParaDateTime();
+				int lancamento = int.Parse(lancamentoEty.Text);
 
 				if (string.IsNullOrEmpty( livroCaminho ))
 					livro = new Livro(
@@ -467,7 +468,7 @@ public partial class AdicionarLivroPopUp
 			// Se houver data de lançamento
 			else
 			{
-				DateTime lancamento = lancamentoEty.Text.ConverterParaDateTime();
+				int lancamento = int.Parse( lancamentoEty.Text);
 
 				if (string.IsNullOrEmpty( livroCaminho ))
 					livro = new Livro(

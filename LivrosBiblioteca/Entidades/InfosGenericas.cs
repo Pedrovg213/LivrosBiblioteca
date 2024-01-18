@@ -27,6 +27,14 @@ public class InfosGenericas
 	} = new List<ObjectId>( );
 
 
+	// CONSTRUTORES: protected
+
+	protected InfosGenericas ()
+	{
+		if (BsonId == ObjectId.Empty)
+			BsonId = ObjectId.GenerateNewId( );
+	}
+
 	// FUNÇÕES: public
 
 	/// <summary>

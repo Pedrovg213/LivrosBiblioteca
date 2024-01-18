@@ -1,4 +1,6 @@
 ﻿using LivrosBiblioteca.Entidades;
+using LivrosBiblioteca.Extensoes;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace LivrosBiblioteca.Servicos;
@@ -33,6 +35,8 @@ public class DataBase
 	private static IMongoDatabase dataBase = PegarDataBase();
 	private static IMongoCollection<Autor> autoresColecao = PegarAutoresColecao();
 	private static IMongoCollection<Livro> livrosColecao = PegarLivrosColecao();
+	private static List<Autor> autoresList = new List<Autor>();
+	private static List<Livro> livrosList = new List<Livro>();
 
 
 	// FUNÇÕES: private static
@@ -89,33 +93,25 @@ public class DataBase
 	/// <param name="autor">Autor a ser adicionado à base de dados.</param>
 	public static void AdicionarAutor ( Autor autor )
 	{
-		if (PegarAutores( ).Contains( autor ))
+		if (autoresList.Contains( autor ))
 		{
 			AtualizarAutor( autor );
 			return;
 		}
 
-		autoresColecao.InsertOne( autor );
+		autoresList.Add( autor );
 	}
 
 	public static void AtualizarAutor ( Autor autor )
 	{
-		if (!PegarAutores( ).Contains( autor ))
+		if (!autoresList.Contains( autor ))
 		{
 			AdicionarAutor( autor );
 			return;
 		}
 
-		UpdateDefinition<Autor> updateDef = Builders<Autor>
-			.Update
-			.Set(CONTIDOS_ID, autor.PegarLivrosIds())
-			.Set(AUTOR_NOME, autor.PegarNome())
-			.Set(AUTOR_NASCIMENTO, autor.PegarNascimento())
-			.Set(AUTOR_NASCIMENTOAC, autor.PegarNascimentoAC())
-			.Set(AUTOR_MORTE, autor.PegarMorte())
-			.Set(AUTOR_MORTEAC, autor.PegarMorteAC());
-
-		autoresColecao.UpdateOne( a => a == autor, updateDef );
+		int index = autoresList.IndexOf(autor);
+		autoresList[index] = autor;
 	}
 
 	/// <summary>
@@ -124,23 +120,81 @@ public class DataBase
 	/// <param name="livro">Livro a ser adicionado à base de dados.</param>
 	public static void AdicionarLivro ( Livro livro )
 	{
-		if (PegarLivros( ).Contains( livro ))
+		if (livrosList.Contains( livro ))
 		{
 			AtualizarLivro( livro );
 			return;
 		}
 
-		livrosColecao.InsertOne( livro );
+		livrosList.Add( livro );
 	}
 	public static void AtualizarLivro ( Livro livro )
 	{
-		if (!PegarLivros( ).Contains( livro ))
+		if (!livrosList.Contains( livro ))
 		{
 			AdicionarLivro( livro );
 			return;
 		}
 
-		UpdateDefinition<Livro> updateDef = Builders<Livro>
+		int index = livrosList.IndexOf(livro);
+		livrosList[index] = livro;
+	}
+
+	/// <summary>
+	/// Adiciona livros com suas informações à colação dos livros da base de dados.
+	/// </summary>
+	/// <param name="livro">Livros a serem adicionados à base de dados.</param>
+	public static void AdicionarLivro ( params Livro[] livro ) =>
+		livrosList.Concat( livro );
+
+	public static void IniciarDataBase ()
+	{
+		autoresList = autoresColecao.AsQueryable( ).ToList( );
+		livrosList = livrosColecao.AsQueryable( ).ToList( );
+	}
+
+	/// <summary>
+	/// Encerra a base de dados salvando as informações das listas de livros e de autores nas coleções do mongoDB
+	/// </summary>
+	public static void EncerrarDataBase ()
+	{
+		// AUTORES
+
+		IEnumerable<Autor> autoresMongoCol = autoresColecao.AsQueryable().AsEnumerable();
+
+		foreach (Autor autor in autoresList)
+		{
+			if (!autoresMongoCol.Contains( autor ))
+			{
+				autoresColecao.InsertOne( autor );
+				continue;
+			}
+
+			UpdateDefinition<Autor> updateDef = Builders<Autor>
+			.Update
+			.Set(CONTIDOS_ID, autor.PegarLivrosIds())
+			.Set(AUTOR_NOME, autor.PegarNome())
+			.Set(AUTOR_NASCIMENTO, autor.PegarNascimento())
+			.Set(AUTOR_NASCIMENTOAC, autor.PegarNascimentoAC())
+			.Set(AUTOR_MORTE, autor.PegarMorte())
+			.Set(AUTOR_MORTEAC, autor.PegarMorteAC());
+
+			autoresColecao.UpdateOne( a => a == autor, updateDef );
+		}
+
+		// LIVROS
+
+		IEnumerable<Livro> livrosMongoCol = livrosColecao.AsQueryable().AsEnumerable();
+
+		foreach (Livro livro in livrosList)
+		{
+			if (!livrosMongoCol.Contains( livro ))
+			{
+				livrosColecao.InsertOne( livro );
+				continue;
+			}
+
+			UpdateDefinition<Livro> updateDef = Builders<Livro>
 			.Update
 			.Set(CONTIDOS_ID, livro.PegarAutoresIds())
 			.Set(LIVRO_TITULO, livro.PegarTitulo())
@@ -149,27 +203,43 @@ public class DataBase
 			.Set(LIVRO_LANCAMENTOAC, livro.PegarLancamentoAC())
 			.Set(LIVRO_ARQUIVO, livro.PegarArquivo());
 
-		livrosColecao.UpdateOne( l => l == livro, updateDef );
+			livrosColecao.UpdateOne( l => l == livro, updateDef );
+		}
 	}
-
-	/// <summary>
-	/// Adiciona livros com suas informações à colação dos livros da base de dados.
-	/// </summary>
-	/// <param name="livro">Livros a serem adicionados à base de dados.</param>
-	public static void AdicionarLivro ( params Livro[] livro ) =>
-		livrosColecao.InsertMany( livro );
 
 	/// <summary>
 	/// Pega a lista de todos os autores salvos na base de dados.
 	/// </summary>
-	public static IEnumerable<Autor> PegarAutores () =>
-		autoresColecao.AsQueryable( ).AsEnumerable( );
+	public static List<Autor> PegarAutores () =>
+		autoresList;
+
+	/// <summary>
+	/// Pegar autores com base na lista de Ids de autores passada como parâmetro.
+	/// </summary>
+	/// <param name="autoresIds">Lista de Ids buscadas na coleção de autores.</param>
+	/// <returns>Retorna a lista de autores que corresponde a lista de Ids no parâmetro.</returns>
+	public static List<Autor> PegarAutores ( List<ObjectId> autoresIds )
+	{
+		List<Autor> autores = new List<Autor> ();
+		List<ObjectId> autoresColIds = autoresList.SelectList( a => a.PegarId( ) );
+
+		foreach (ObjectId autorBucId in autoresIds)
+		{
+			if (autoresColIds.Contains( autorBucId ))
+			{
+				int index = autoresColIds.IndexOf(autorBucId);
+				autores.Add( autoresList[index] );
+			}
+		}
+
+		return autores;
+	}
 
 	/// <summary>
 	/// Pega a lista de todos os livros salvos na base de dados.
 	/// </summary>
 	public static IEnumerable<Livro> PegarLivros () =>
-		livrosColecao.AsQueryable( ).AsEnumerable( );
+		livrosList;
 
 
 	/// <summary>
@@ -180,7 +250,7 @@ public class DataBase
 	public static List<string> ProcurarAutoresPorNome ( string procura )
 	{
 		List<string> resultado = new List<string>();
-		IEnumerable<string> autoresLista = PegarAutores().Select(a => a.PegarNome());
+		IEnumerable<string> autoresLista = autoresList.Select(a => a.PegarNome());
 
 		foreach (string autorNome in autoresLista)
 		{

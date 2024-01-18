@@ -15,4 +15,7 @@ public static class IEnumerableExtensions
 
 	public static ObservableCollection<T> WhereObservableCollection<T> ( this IEnumerable<T> collection, Func<T, bool> predicado ) =>
 		new ObservableCollection<T>( collection.Where( predicado ) );
+
+	public static List<T> ConcatList<T> ( this IEnumerable<T> collection, List<T> second ) =>
+		collection.Concat( second ).ToList( );
 }

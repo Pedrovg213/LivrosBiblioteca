@@ -51,14 +51,13 @@
 						   Placeholder="Título do Livro"
 						   HorizontalOptions="Fill"
 						   HorizontalTextAlignment="Center" />
-					<Label Text="Lançamento:"
+					<Label Text="Ano de Lançamento:"
 						   HorizontalOptions="Center" />
 					<Entry x:Name="lancamentoEty"
-						   Placeholder="dd/mm/aaaa ac"
+						   Placeholder="aaaa"
 						   HorizontalOptions="Fill"
 						   HorizontalTextAlignment="Center"
-						   TextChanged="DateEntry_TextChanged"
-						   Unfocused="Entry_Unfocused" />
+						   Keyboard="Numeric"/>
 
 				</VerticalStackLayout>
 				<!--AUTOR-->
